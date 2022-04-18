@@ -1,4 +1,5 @@
 import pygame
+import multiprocessing
 
 pygame.init()
 
@@ -50,7 +51,8 @@ class Screen:
         surface.blit(self.surface, self.rect)
 
 
-def draw_to_all_screens(screens, objects):
+def draw_to_all_screens(window, screens, objects):
+    window.fill('black')
     for screen in screens:
         screen.update()
         for obj in objects:
@@ -58,7 +60,7 @@ def draw_to_all_screens(screens, objects):
             obj.draw(screen.surface)
         screen.draw(window)
 
-if __name__ == '__main__':
+def main():
     window = pygame.display.set_mode(SIZE)
     clock = pygame.time.Clock()
     player = Entity()
@@ -78,7 +80,14 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 quit()
 
-        window.fill('black')
-        draw_to_all_screens(all_screens, all_objects)
+        draw_to_all_screens(window, all_screens, all_objects)
         pygame.display.update()
         pygame.display.set_caption(f"FPS: {clock.get_fps():.0f}")
+
+def do_multiprocessing():
+    for _ in range(4):
+        multiprocessing.Process(target=main).start()
+
+if __name__ == '__main__':
+    #main()
+    do_multiprocessing()
