@@ -55,9 +55,10 @@ def draw_to_all_screens(window, screens, objects):
     window.fill('black')
     for screen in screens:
         screen.update()
-        for obj in objects:
-            obj.update()
-            obj.draw(screen.surface)
+        if screen.selected:
+            for obj in objects:
+                obj.update()
+                obj.draw(screen.surface)
         screen.draw(window)
 
 def main():
